@@ -19,6 +19,11 @@ train = [
   "sentencepiece"
 ]
 gpu = ["jax[cuda12]"]
+train-mlx = [
+  "numpy",
+  "mlx>=0.29",
+  "sentencepiece"
+]
 metal = [
     "jax==0.4.38",
     "jaxlib==0.4.38",
