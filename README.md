@@ -129,11 +129,19 @@ Training is plain JAX and runs on any accelerator jax supports. On an NVIDIA mac
 pip install "cactus-needle[train,gpu]"
 ```
 
-On Apple Silicon the `metal` extra trains on the GPU:
+On Apple Silicon the `mlx` backend trains on the GPU natively — this is the
+recommended path on macOS (the experimental `jax-metal` plugin produces NaN
+losses on this architecture):
 
 ```sh
-pip install "cactus-needle[train,metal]"
+pip install "cactus-needle[train,train-mlx]"
+needle finetune data.jsonl --backend mlx --epochs 10
 ```
+
+The MLX backend accepts every `finetune` option, plus `--dtype bfloat16`
+for faster compute. It writes the same adapter format —
+`needle build --lora` works unchanged — and its forward pass is
+argmax-identical to the JAX model (`tests/test_mlx_parity.py`).
 
 **3. Build a tuned `.cact`.** Merge the adapter into the base and quantize. The base auto-downloads if absent.
 
