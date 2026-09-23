@@ -19,6 +19,8 @@ def test_training_dependencies_are_not_required_for_runtime() -> None:
     assert extras["metal"]
     assert not set(extras["gpu"]).intersection(training)
     assert not set(extras["metal"]).intersection(training)
+    assert extras["mlx"]
+    assert not set(extras["mlx"]).intersection(training)
 
     requirements = {
         line.strip()

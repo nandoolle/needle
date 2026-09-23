@@ -11,7 +11,7 @@ pip install cactus-needle                # runtime (inference only)
 pip install "cactus-needle[train]"       # adds JAX + training deps for finetune/build
 ```
 
-`import needle` is lightweight (no JAX). JAX is imported lazily and only by fine-tuning/export/build, and the training dependencies live behind the `[train]` extra - a runtime-only install cannot run `needle finetune`/`build`. For GPU training use `[train,gpu]` (CUDA) or `[train,metal]` (Apple Silicon). The engine binary auto-downloads from Hugging Face on first `Needle(...)` use.
+`import needle` is lightweight (no JAX). JAX is imported lazily and only by fine-tuning/export/build, and the training dependencies live behind the `[train]` extra - a runtime-only install cannot run `needle finetune`/`build`. For GPU training use `[train,gpu]` (CUDA), or `[train,mlx]` with `needle finetune --backend mlx` (Apple Silicon). The engine binary auto-downloads from Hugging Face on first `Needle(...)` use.
 
 ## Core API
 
@@ -185,7 +185,7 @@ agent = needle.Needle(weights="my.cact", tools=[...])
 agent.run("...")
 ```
 
-Options: `finetune --lora-rank 16 --lora-alpha 32 --lr 1e-4 --batch-size 16 --max-len 1024 --val-split 0.1 --checkpoint <base.safetensors> --checkpoint-dir <dir> --out <adapter.safetensors> --generate <n> --model <id> --workers <n>`; `--model` defaults to `deepseek/deepseek-flash-latest`, `--workers` defaults to `8`, and `--checkpoint-dir` defaults to `checkpoints`. `--generate` synthesizes extra examples through the configured OpenRouter endpoint before training. `build --bits 2|4 --upload` (with `NEEDLE_HF_REPO=<you>/<model>`).
+Options: `finetune --lora-rank 16 --lora-alpha 32 --lr 1e-4 --batch-size 16 --max-len 1024 --val-split 0.1 --checkpoint <base.safetensors> --checkpoint-dir <dir> --out <adapter.safetensors> --generate <n> --model <id> --workers <n> --backend jax|mlx`; `--model` defaults to `deepseek/deepseek-flash-latest`, `--workers` defaults to `8`, `--checkpoint-dir` defaults to `checkpoints`, and `--backend` defaults to `jax` (`mlx` trains on the Apple silicon GPU with the same numerics and adapter format). `--generate` synthesizes extra examples through the configured OpenRouter endpoint before training. `build --bits 2|4 --upload` (with `NEEDLE_HF_REPO=<you>/<model>`).
 
 ## Platform (hosted fine-tuning)
 

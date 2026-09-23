@@ -72,7 +72,7 @@ Two ways to fine-tune, from the same package:
 | Precision | 4-bit | 2-bit, the same post-training as the shipped model |
 | Data | Your JSONL, `query`/`answers` or chat format | Yours, or generated from your tool definitions, 100 to 10,000 examples per run |
 | Scores | Validation loss | Validation and test accuracy for every depth |
-| Compute | Your machine, JAX on CPU, CUDA or Metal | Cactus GPUs |
+| Compute | Your machine, JAX on CPU or CUDA, MLX on Apple silicon | Cactus GPUs |
 | Runs from | The CLI | The CLI, Python, the [dashboard](https://cactuscompute.com/dashboard), or a coding agent holding your key |
 
 Local:
@@ -81,6 +81,13 @@ Local:
 pip install "cactus-needle[train]"
 needle finetune data.jsonl --epochs 10 --out adapter.safetensors
 needle build --lora adapter.safetensors --layers 8 --out tuned.cact
+```
+
+On Apple silicon, `--backend mlx` trains on the GPU with the same data, LoRA placement and 4-bit numerics, and writes the same adapter:
+
+```sh
+pip install "cactus-needle[train,mlx]"
+needle finetune data.jsonl --backend mlx --epochs 10 --out adapter.safetensors
 ```
 
 Platform, with a key from the [console](https://cactuscompute.com/dashboard/api-keys) in `NEEDLE_API_KEY`. One command uploads the files, trains and scores every size, and downloads the `.cact` files; once a job is submitted it can also be followed on the dashboard:

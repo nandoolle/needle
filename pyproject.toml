@@ -25,6 +25,7 @@ metal = [
     "jaxlib==0.4.38",
     "jax-metal"
 ]
+mlx = ["mlx>=0.29; sys_platform == 'darwin' and platform_machine == 'arm64'"]
 test = ["pytest", "pydantic"]
 
 [project.scripts]
