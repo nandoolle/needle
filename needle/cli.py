@@ -176,6 +176,8 @@ def main():
     p.add_argument("--checkpoint-dir", type=str, default="checkpoints")
     p.add_argument("--out", type=str, default=None,
                    help="Output adapter path (.safetensors)")
+    p.add_argument("--backend", choices=["jax", "mlx"], default="jax",
+                   help="Training backend: jax (CPU/CUDA) or mlx (Apple silicon GPU)")
 
     p = sub.add_parser("generate-data")
     p.add_argument("--tools", type=str, default=None, help="Tool schemas JSON to seed generation")
@@ -276,8 +278,12 @@ def main():
         from .model.run import main as run_main
         run_main(args)
     elif args.command == "finetune":
-        from .model.finetune import finetune_local
-        finetune_local(args)
+        if args.backend == "mlx":
+            from .model.finetune_mlx import finetune_mlx
+            finetune_mlx(args)
+        else:
+            from .model.finetune import finetune_local
+            finetune_local(args)
     elif args.command == "generate-data":
         from .model.finetune import generate_main
         generate_main(args)
